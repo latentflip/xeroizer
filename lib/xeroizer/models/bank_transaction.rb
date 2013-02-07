@@ -15,6 +15,7 @@ module Xeroizer
       } unless defined?(BANK_TRANSACTION_STATUS)
       BANK_TRANSACTION_STATUSES = BANK_TRANSACTION_STATUS.keys.sort
 
+      list_contains_summary_only true
 
       def initialize(parent)
         super parent
@@ -53,6 +54,7 @@ module Xeroizer
         self.line_items.size > 0
       end
 
+      
       def sub_total=(value); raise SettingTotalDirectlyNotSupported.new(:sub_total); end
       def total_tax=(value); raise SettingTotalDirectlyNotSupported.new(:total_tax); end
       def total=(value);     raise SettingTotalDirectlyNotSupported.new(:total);     end
