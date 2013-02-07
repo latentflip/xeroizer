@@ -4,12 +4,12 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = "xeroizer-float"
-  s.version = "2.15.3.1"
+  s.name = "xeroizer"
+  s.version = "2.15.3.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Wayne Robinson", "Philip Roberts"]
-  s.date = "2012-12-07"
+  s.date = "2013-02-07"
   s.description = "Ruby library for the Xero accounting system API."
   s.email = "wayne.robinson@gmail.com"
   s.extra_rdoc_files = [
@@ -357,7 +357,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/waynerobinson/xeroizer"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.24"
+  s.rubygems_version = "1.8.21"
   s.summary = "Xero library"
 
   if s.respond_to? :specification_version then
