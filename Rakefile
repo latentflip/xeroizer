@@ -62,5 +62,4 @@ namespace :gem do
     puts `gem build xeroizer-float.gemspec`
     puts `gem push *.gem`
   end
-
 end
