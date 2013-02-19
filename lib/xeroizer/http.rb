@@ -90,7 +90,7 @@ module Xeroizer
               response.plain_body
             when 400
               handle_error!(response, body)
-            when 401, 503
+            when 401
               handle_oauth_error!(response)
             when 404
               handle_object_not_found!(response, url)
