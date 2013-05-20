@@ -34,6 +34,9 @@ module Xeroizer
       boolean       :is_reconciled
       string        :status
 
+      string        :currency_code
+      decimal       :currency_rate, :calculated => true
+
       alias_method :reconciled?, :is_reconciled
 
       belongs_to :contact, :model_name => 'Contact'
@@ -53,6 +56,14 @@ module Xeroizer
 
       validates :line_items, :message => "Invalid line items. Must supply at least one." do
         self.line_items.size > 0
+      end
+
+      def currency_rate
+        if attributes[:currency_rate]
+          BigDecimal.new(attributes[:currency_rate])
+        else
+          BigDecimal.new('1.0')
+        end
       end
 
       def sub_total=(value); raise SettingTotalDirectlyNotSupported.new(:sub_total); end

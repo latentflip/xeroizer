@@ -17,7 +17,8 @@
       <TotalTax>19.90</TotalTax>
       <Total>218.90</Total>
       <UpdatedDateUTC>2008-09-16T09:40:09.467</UpdatedDateUTC>
-      <CurrencyCode>AUD</CurrencyCode>
+      <CurrencyCode>USD</CurrencyCode>
+      <CurrencyRate>1.5619</CurrencyRate>
       <FullyPaidOnDate>2011-03-07T00:00:00</FullyPaidOnDate>
       <Type>ACCPAYCREDIT</Type>
       <CreditNoteID>7df8949c-b71f-40c0-bbcf-39f2f450f286</CreditNoteID>

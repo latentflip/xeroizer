@@ -65,6 +65,7 @@ module Xeroizer
       decimal      :amount_credited
       datetime_utc :updated_date_utc, :api_name => 'UpdatedDateUTC'
       string       :currency_code
+      decimal      :currency_rate, :calculated => true
       datetime     :fully_paid_on_date
       boolean      :sent_to_contact
       
@@ -108,6 +109,14 @@ module Xeroizer
         # Helper method to check if the invoice is accounts receivable.
         def accounts_receivable?
           type == 'ACCREC'
+        end
+
+        def currency_rate
+          if attributes[:currency_rate]
+            BigDecimal.new(attributes[:currency_rate])
+          else
+            BigDecimal.new('1.0')
+          end
         end
         
         def sub_total=(sub_total)

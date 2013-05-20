@@ -44,6 +44,13 @@ class InvoiceTest < Test::Unit::TestCase
     should "large-scale testing from API XML" do
       invoices = @client.Invoice.all
       invoices.each do | invoice |
+        assert_equal(invoice.attributes[:currency_code], invoice.currency_code)
+        if invoice.attributes[:currency_rate]
+          assert_equal(invoice.attributes[:currency_rate], invoice.currency_rate)
+        else
+          assert_equal(1.0, invoice.currency_rate)
+        end
+
         assert_equal(invoice.attributes[:sub_total], invoice.sub_total)
         assert_equal(invoice.attributes[:total_tax], invoice.total_tax)
         assert_equal(invoice.attributes[:total], invoice.total)
