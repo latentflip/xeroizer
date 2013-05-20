@@ -1,3 +1,17 @@
+# Copyright (c) 2008 Tim Connor <tlconnor@gmail.com>
+# 
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
 module Xeroizer
   
   # Shamelessly taken from the XeroGateway library by Tim Connor which is shamelessly 
@@ -50,6 +64,7 @@ module Xeroizer
     # @option options [String] :request_token_path base URL path for getting a RequestToken (default: "/oauth/RequestToken")
     # @option options [String] :signature_method method usd to sign requests (default: OAuth library default)
     # @option options [String] :site base site for API requests (default: "https://api.xero.com")
+    # @option options [IO] :http_debug_output filehandle to write HTTP traffic to
     # @option options [OpenSSL:X509::Certificate] :ssl_client_cert client-side SSL certificate to use for requests (used for PartnerApplication mode)
     # @option options [OpenSSL::PKey::RSA] :ssl_client_key client-side SSL private key to use for requests (used for PartnerApplication mode)
     def initialize(ctoken, csecret, options = {})
@@ -104,9 +119,9 @@ module Xeroizer
       })
       update_attributes_from_token(access_token)
     end
-    
-    private 
-    
+
+    private
+
       # Create an OAuth consumer with the SSL client key if specified in @consumer_options when
       # this instance was created.
       def create_consumer
@@ -116,8 +131,13 @@ module Xeroizer
           consumer.http.key = @consumer_options[:ssl_client_key]
         end
         consumer
+
+        if @consumer_options[:http_debug_output]
+          consumer.http.set_debug_output(@consumer_options[:http_debug_output])
+        end
+        consumer
       end
-      
+
       # Update instance variables with those from the AccessToken.
       def update_attributes_from_token(access_token)
         @expires_at = Time.now + access_token.params[:oauth_expires_in].to_i
@@ -125,6 +145,5 @@ module Xeroizer
         @session_handle = access_token.params[:oauth_session_handle]
         @atoken, @asecret = access_token.token, access_token.secret
       end
-          
   end
 end

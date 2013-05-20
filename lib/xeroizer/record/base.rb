@@ -51,11 +51,13 @@ module Xeroizer
         end
         
         def []=(attribute, value)
+          parent.mark_dirty(self) if parent
           self.send("#{attribute}=".to_sym, value)
         end
 
         def attributes=(new_attributes)
           return unless new_attributes.is_a?(Hash)
+          parent.mark_dirty(self) if parent
           new_attributes.each do | key, value |
             self.send("#{key}=".to_sym, value)
           end
@@ -84,6 +86,7 @@ module Xeroizer
           record = self.parent.find(self.id)
           @attributes = record.attributes if record
           @complete_record_downloaded = true
+          parent.mark_clean(self)
           self
         end
         
@@ -94,8 +97,29 @@ module Xeroizer
           else
             update
           end
+          saved!
+        end
+
+        def saved!
           @complete_record_downloaded = true
+          parent.mark_clean(self)
           true
+        end
+        
+        def to_json(*args)
+          to_h.to_json(*args)
+        end
+
+        # Deprecated
+        def as_json(options = {})
+          to_h.to_json
+        end
+
+        def to_h
+          attrs = self.attributes.reject {|k, v| k == :parent }.map do |k, v|
+            [k, v.kind_of?(Array) ? v.map(&:to_h) : (v.respond_to?(:to_h) ? v.to_h : v)]
+          end
+          Hash[attrs]
         end
 
         def inspect
@@ -112,7 +136,7 @@ module Xeroizer
           request = to_xml
           log "[CREATE SENT] (#{__FILE__}:#{__LINE__}) #{request}"
           
-          response = parent.http_put(request)
+          response = parent.http_post(request)
           log "[CREATE RECEIVED] (#{__FILE__}:#{__LINE__}) #{response}"
           
           parse_save_response(response)

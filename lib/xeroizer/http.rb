@@ -1,3 +1,17 @@
+# Copyright (c) 2008 Tim Connor <tlconnor@gmail.com>
+# 
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
 module Xeroizer
   module Http
     
@@ -69,7 +83,7 @@ module Xeroizer
 
         begin
           attempts += 1
-          logger.info("\n== [#{Time.now.to_s}] XeroGateway Request: #{uri.request_uri} ") if self.logger
+          logger.info("\n== [#{Time.now.to_s}] XeroGateway Request: #{method.to_s.upcase} #{uri.request_uri} ") if self.logger
 
           response = case method
             when :get   then    client.get(uri.request_uri, headers)
@@ -133,16 +147,17 @@ module Xeroizer
         
         # XeroGenericApplication API Exceptions *claim* to be UTF-16 encoded, but fail REXML/Iconv parsing...
         # So let's ignore that :)
-        # raw_response.gsub! '<?xml version="1.0" encoding="utf-16"?>', ''
+        raw_response.gsub! '<?xml version="1.0" encoding="utf-16"?>', ''
         
         # doc = REXML::Document.new(raw_response, :ignore_whitespace_nodes => :all)
         doc = Nokogiri::XML(raw_response)
         
         if doc && doc.root && doc.root.name == "ApiException"
 
-          raise ApiException.new(doc.root.xpath("Type").text, 
-                                 doc.root.xpath("Message").text, 
+          raise ApiException.new(doc.root.xpath("Type").text,
+                                 doc.root.xpath("Message").text,
                                  raw_response,
+                                 doc,
                                  request_body)
 
         else

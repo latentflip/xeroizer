@@ -6,7 +6,7 @@ Xeroizer API Library ![Project status](http://stillmaintained.com/waynerobinson/
 **Github**: 			[https://github.com/waynerobinson/xeroizer](https://github.com/waynerobinson/xeroizer)		
 **Author**: 			Wayne Robinson [http://www.wayne-robinson.com](http://www.wayne-robinson.com)		
 **Contributors**: See Contributors section below	
-**Copyright**:    2007-2010		
+**Copyright**:    2007-2013
 **License**:      MIT License		
 
 Introduction
@@ -435,9 +435,30 @@ contact.save
 Have a look at the models in `lib/xeroizer/models/` to see the valid attributes, associations and 
 minimum validation requirements for each of the record types.
 
+### Bulk Creates & Updates
+
+Xero has a hard daily limit on the number of API requests you can make (currently 1,000 requests
+per account per day). To save on requests, you can batch creates and updates into a single PUT or
+POST call, like so:
+
+```ruby
+contact1 = xero.Contact.create(some_attributes)
+xero.Contact.batch_save do
+  contact1.email_address = "foo@bar.com"
+  contact2 = xero.Contact.build(some_other_attributes)
+  contact3 = xero.Contact.build(some_more_attributes)
+end
+```
+
+`batch_save` will issue one PUT request for every 2,000 unsaved records built within its block, and one
+POST request for evert 2,000 existing records that have been altered within its block. If any of the
+unsaved records aren't valid, it'll return `false` before sending anything across the wire;
+otherwise, it returns `true`. `batch_save` takes one optional argument: the number of records to
+create/update per request. (Defaults to 2,000.)
+
 ### Errors
 
-If a record doesn't match it's internal validation requirements the `#save` method will return
+If a record doesn't match its internal validation requirements, the `#save` method will return
 `false` and the `#errors` attribute will be populated with what went wrong.
 
 For example:
@@ -527,3 +548,9 @@ client = Xeroizer::PublicApplication.new(YOUR_OAUTH_CONSUMER_KEY,
                                          YOUR_OAUTH_CONSUMER_SECRET,
                                          :rate_limit_sleep => 2)
 ```
+
+
+### Contributors
+Xeroizer was inspired by the https://github.com/tlconnor/xero_gateway gem created by Tim Connor 
+and Nik Wakelin and portions of the networking and authentication code are based completely off 
+this project. Copyright for these components remains held in the name of Tim Connor.
