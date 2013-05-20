@@ -57,6 +57,7 @@ module Xeroizer
       decimal       :total, :calculated => true
       datetime_utc  :updated_date_utc, :api_name => 'UpdatedDateUTC'
       string        :currency_code
+      decimal       :currency_rate, :calculated => true
       datetime      :fully_paid_on_date
       boolean       :sent_to_contact
       
@@ -81,6 +82,14 @@ module Xeroizer
         def contact_id
           attributes[:contact] && attributes[:contact][:contact_id]
         end      
+
+        def currency_rate
+          if attributes[:currency_rate]
+            BigDecimal.new(attributes[:currency_rate])
+          else
+            BigDecimal.new('1.0')
+          end
+        end
       
         # Swallow assignment of attributes that should only be calculated automatically.
         def sub_total=(value);  raise SettingTotalDirectlyNotSupported.new(:sub_total);   end
