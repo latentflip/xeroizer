@@ -38,6 +38,8 @@ class CreditNoteTest < Test::Unit::TestCase
         assert_equal(credit_note.attributes[:sub_total], credit_note.sub_total)
         assert_equal(credit_note.attributes[:total_tax], credit_note.total_tax)
         assert_equal(credit_note.attributes[:total], credit_note.total)
+
+        assert_equal(credit_note.attributes[:remaining_credit], credit_note.remaining_credit)
       end
     end
     
