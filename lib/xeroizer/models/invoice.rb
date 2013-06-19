@@ -113,7 +113,11 @@ module Xeroizer
 
         def currency_rate
           if attributes[:currency_rate]
-            BigDecimal.new(attributes[:currency_rate])
+            if attributes[:currency_rate].is_a? BigDecimal
+              attributes[:currency_rate]
+            else
+              BigDecimal.new(attributes[:currency_rate])
+            end
           else
             BigDecimal.new('1.0')
           end
