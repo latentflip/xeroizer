@@ -47,6 +47,13 @@ namespace :test do
     t.pattern = 'test/unit/**/*_test.rb'
     t.verbose = true
   end
+
+  desc 'Run my tests'
+  Rake::TestTask.new(:my) do |t|
+    t.libs << ['lib', 'test']
+    t.pattern = 'test/unit/models/**/*_test.rb'
+    t.verbose = true
+  end
 end
 
 YARD::Rake::YardocTask.new do |t|
