@@ -14,6 +14,7 @@ module Xeroizer
                  
       attr_reader :attributes
       attr_reader :parent
+      attr_reader :model
       attr_accessor :errors
       attr_accessor :complete_record_downloaded
       
@@ -36,12 +37,13 @@ module Xeroizer
       end
       
       public
-      
+
         def initialize(parent)
           @parent = parent
+          @model = new_model_class(self.class.name.demodulize)
           @attributes = {}
         end
-        
+
         def new_model_class(model_name)
           Xeroizer::Record.const_get("#{model_name}Model".to_sym).new(parent.application, model_name.to_s)
         end
@@ -53,6 +55,10 @@ module Xeroizer
         def []=(attribute, value)
           parent.mark_dirty(self) if parent
           self.send("#{attribute}=".to_sym, value)
+        end
+
+        def non_calculated_attributes
+          attributes.reject {|name| self.class.fields[name][:calculated] }
         end
 
         def attributes=(new_attributes)

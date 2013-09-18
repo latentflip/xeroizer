@@ -141,6 +141,7 @@ module Xeroizer
         end
 
         def batch_save(chunk_size = DEFAULT_RECORDS_PER_BATCH_SAVE)
+          no_errors = true
           @objects = {}
           @allow_batch_operations = true
 
@@ -156,8 +157,9 @@ module Xeroizer
                 response = parse_response(self.send(http_method, request, {:summarizeErrors => false}))
                 response.response_items.each_with_index do |record, i|
                   if record and record.is_a?(model_class)
-                    some_records[i].attributes = record.attributes
+                    some_records[i].attributes = record.non_calculated_attributes
                     some_records[i].errors = record.errors
+                    no_errors = record.errors.nil? || record.errors.empty? if no_errors
                     some_records[i].saved!
                   end
                 end
@@ -167,7 +169,7 @@ module Xeroizer
 
           @objects = {}
           @allow_batch_operations = false
-          true
+          no_errors
         end
 
         def parse_response(response_xml, options = {})
