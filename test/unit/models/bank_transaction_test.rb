@@ -7,8 +7,7 @@ class BankTransactionTest < Test::Unit::TestCase
   def setup
     fake_parent = Class.new do
       attr_accessor :application
-      def mark_dirty(*args)
-      end
+      def mark_dirty(*args); end
     end.new
 
     the_line_items = [
@@ -52,7 +51,6 @@ class BankTransactionTest < Test::Unit::TestCase
   end
 
   context "bank transaction totals" do
-
     should "large-scale testing from API XML" do
       bank_transactions = @client.BankTransaction.all
       bank_transactions.each do | bank_transaction |
@@ -69,6 +67,16 @@ class BankTransactionTest < Test::Unit::TestCase
           assert_equal(1.0, bank_transaction.currency_rate)
         end
       end
+    end
+
+    should "handle bank transfers properly" do
+      bank_transactions = @client.BankTransaction.all
+      bank_transaction = bank_transactions.find { |bt| bt.attributes[:type] == "SPEND-TRANSFER" }
+
+      assert( bank_transaction.is_transfer? )
+      assert_equal( bank_transaction.attributes[:total], bank_transaction.total)
+      assert_equal( bank_transaction.attributes[:total], bank_transaction.sub_total)
+      assert_equal( 0, bank_transaction.total_tax)
     end
 
   end

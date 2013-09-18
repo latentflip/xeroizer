@@ -15,6 +15,7 @@ module Xeroizer
       } unless defined?(BANK_TRANSACTION_STATUS)
       BANK_TRANSACTION_STATUSES = BANK_TRANSACTION_STATUS.keys.sort
 
+      BANK_TRANSFER_TYPES = [ 'SPEND-TRANSFER', 'RECEIVE-TRANSFER' ]
 
       def initialize(parent)
         super parent
@@ -36,6 +37,10 @@ module Xeroizer
 
       string        :currency_code
       decimal       :currency_rate, :calculated => true
+
+      decimal :total, :calculated => true
+      decimal :sub_total, :calculated => true
+      decimal :total_tax, :calculated => true
 
       alias_method :reconciled?, :is_reconciled
 
@@ -73,6 +78,8 @@ module Xeroizer
       def total; sub_total + total_tax; end
 
       def sub_total
+        return attributes[:total] if is_transfer?
+
         if ought_to_recalculate_totals?
           result = LineItemSum.sub_total(self.line_items)
           result -= total_tax if line_amount_types == 'Inclusive'
@@ -83,9 +90,15 @@ module Xeroizer
       end
 
       def total_tax
+        return BigDecimal.new('0') if is_transfer?
+
         return ought_to_recalculate_totals? ?
           LineItemSum.total_tax(self.line_items) :
           attributes[:total_tax]
+      end
+
+      def is_transfer?
+        BANK_TRANSFER_TYPES.include? attributes[:type]
       end
 
       private
