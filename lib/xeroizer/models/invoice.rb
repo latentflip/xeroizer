@@ -56,6 +56,7 @@ module Xeroizer
       date         :date
       date         :due_date
       date         :expected_payment_date
+      date         :planned_payment_date
       string       :status
       string       :line_amount_types
       decimal      :sub_total, :calculated => true
