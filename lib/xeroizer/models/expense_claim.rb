@@ -1,13 +1,16 @@
+require "xeroizer/models/attachment"
 module Xeroizer
   module Record
     
     class ExpenseClaimModel < BaseModel
         
       set_permissions :read, :write, :update
+      include AttachmentModel::Extensions
       
     end
     
     class ExpenseClaim < Base
+      include Attachment::Extensions
       list_contains_summary_only true
       set_primary_key :expense_claim_id
 
