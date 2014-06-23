@@ -112,10 +112,10 @@ class XeroSessionController < ApplicationController
 						
 			session[:xero_auth] = {
 					:access_token => @xero_client.access_token.token,
-					:access_key => @xero_client.access_token.key }
+					:access_key => @xero_client.access_token.secret }
 															
-			session.data.delete(:request_token)
-			session.data.delete(:request_secret)
+			session[:request_token] = nil
+            session[:request_secret] = nil
 		end
 		
 		def destroy
@@ -549,6 +549,17 @@ client = Xeroizer::PublicApplication.new(YOUR_OAUTH_CONSUMER_KEY,
                                          :rate_limit_sleep => 2)
 ```
 
+Logging
+---------------
+
+You can add an optional paramater to the Xeroizer Application initialization, to pass a logger object that will need to respond_to :info. For example, in a rails app:
+
+```ruby
+XeroLogger = Logger.new('log/xero.log', 'weekly')
+client = Xeroizer::PublicApplication.new(YOUR_OAUTH_CONSUMER_KEY,
+                                         YOUR_OAUTH_CONSUMER_SECRET,
+                                         :logger => XeroLogger)
+```
 
 ### Contributors
 Xeroizer was inspired by the https://github.com/tlconnor/xero_gateway gem created by Tim Connor 

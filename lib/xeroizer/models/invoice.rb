@@ -1,3 +1,5 @@
+require "xeroizer/models/attachment"
+
 module Xeroizer
   module Record
 
@@ -8,6 +10,8 @@ module Xeroizer
 
       set_permissions :read, :write, :update
 
+      include AttachmentModel::Extensions
+
       public
 
         # Retrieve the PDF version of the invoice matching the `id`.
@@ -16,7 +20,7 @@ module Xeroizer
         def pdf(id, filename = nil)
           pdf_data = @application.http_get(@application.client, "#{url}/#{CGI.escape(id)}", :response => :pdf)
           if filename
-            File.open(filename, "w") { | fp | fp.write pdf_data }
+            File.open(filename, "wb") { | fp | fp.write pdf_data }
             nil
           else
             pdf_data
@@ -42,6 +46,8 @@ module Xeroizer
         'VOIDED' =>           'Approved invoices that are voided'
       } unless defined?(INVOICE_STATUS)
       INVOICE_STATUSES = INVOICE_STATUS.keys.sort
+
+      include Attachment::Extensions
 
       set_primary_key :invoice_id
       set_possible_primary_keys :invoice_id, :invoice_number
@@ -70,6 +76,7 @@ module Xeroizer
       decimal      :currency_rate, :calculated => true
       datetime     :fully_paid_on_date
       boolean      :sent_to_contact
+      boolean      :has_attachments
 
       belongs_to   :contact
       has_many     :line_items
@@ -204,7 +211,7 @@ module Xeroizer
       protected
 
         def change_status!(new_status)
-          raise CannotChangeInvoiceStatus.new(record, new_status) unless self.payments.size == 0
+          raise CannotChangeInvoiceStatus.new(self, new_status) unless self.payments.size == 0
           self.status = new_status
           self.save
         end

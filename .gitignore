@@ -11,3 +11,5 @@ pkg/
 .oauth
 .DS_Store
 .gem
+.idea/
+

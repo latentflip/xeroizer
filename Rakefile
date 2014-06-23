@@ -4,7 +4,9 @@ require 'rdoc/task'
 require 'rubygems'
 require 'yard'
 
+require 'bundler/gem_tasks'
 require 'jeweler'
+
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "xeroizer-float"
@@ -33,7 +35,7 @@ Rake::TestTask.new(:test) do |t|
   t.verbose = true
 end
 
-namespace :test do 
+namespace :test do
   desc 'Run acceptance/integration tests'
   Rake::TestTask.new(:acceptance) do |t|
     t.libs << ['lib', 'test']
