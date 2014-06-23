@@ -8,7 +8,7 @@ module Xeroizer
     end
     
     class ExpenseClaim < Base
-      
+      list_contains_summary_only true
       set_primary_key :expense_claim_id
 
       guid          :expense_claim_id
