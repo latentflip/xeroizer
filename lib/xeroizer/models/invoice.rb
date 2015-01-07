@@ -51,7 +51,7 @@ module Xeroizer
 
       set_primary_key :invoice_id
       set_possible_primary_keys :invoice_id, :invoice_number
-      # list_contains_summary_only true
+      #list_contains_summary_only true
 
       guid         :invoice_id
       string       :invoice_number
