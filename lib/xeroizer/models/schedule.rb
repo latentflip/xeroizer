@@ -7,7 +7,7 @@ module Xeroizer
     class Schedule < Base      
       decimal :period
       string  :unit
-      date    :due_date
+      decimal :due_date
       string  :due_date_type
       date    :start_date
       date    :next_scheduled_date
