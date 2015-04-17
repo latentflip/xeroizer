@@ -30,6 +30,7 @@ module Xeroizer
     record :TrackingCategory
     record :BankTransaction
     record :User
+    record :RepeatingInvoice
 
     report :AgedPayablesByContact
     report :AgedReceivablesByContact
