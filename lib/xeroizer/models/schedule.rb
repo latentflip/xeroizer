@@ -4,7 +4,7 @@ module Xeroizer
         
     end
     
-    class ScheduleItem < Base      
+    class Schedule < Base      
       decimal :period
       string  :unit
       date    :due_date
