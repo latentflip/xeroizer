@@ -72,6 +72,7 @@ module Xeroizer
       boolean      :has_attachments
 
       belongs_to   :contact
+      belongs_to   :schedule
       has_many     :line_items
 
 
