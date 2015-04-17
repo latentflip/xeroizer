@@ -67,7 +67,7 @@ module Xeroizer
       decimal      :total, :calculated => true
       # datetime_utc :updated_date_utc, :api_name => 'UpdatedDateUTC'
       string       :currency_code
-      # decimal      :currency_rate, :calculated => true
+      decimal      :currency_rate, :calculated => true
 
       boolean      :has_attachments
 
