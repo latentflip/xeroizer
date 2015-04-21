@@ -10,6 +10,7 @@ module Xeroizer
       decimal :due_date
       string  :due_date_type
       date    :start_date
+      date    :end_date
       date    :next_scheduled_date
     end
     
