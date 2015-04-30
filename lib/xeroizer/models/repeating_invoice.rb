@@ -3,7 +3,7 @@ require "xeroizer/models/attachment"
 module Xeroizer
   module Record
 
-    class InvoiceModel < BaseModel
+    class RepeatingInvoiceModel < BaseModel
       # To create a new invoice, use the folowing
       # $xero_client.Invoice.build(type: 'ACCREC', ..., contact: {name: 'Foo Bar'},...)
       # Note that we are not making an api request to xero just to get the contact
@@ -29,7 +29,7 @@ module Xeroizer
 
     end
 
-    class Invoice < Base
+    class RepeatingInvoice < Base
 
       INVOICE_TYPE = {
         'ACCREC' =>           'Accounts Receivable',
@@ -49,41 +49,34 @@ module Xeroizer
 
       include Attachment::Extensions
 
-      set_primary_key :invoice_id
-      set_possible_primary_keys :invoice_id, :invoice_number
+      set_primary_key :repeating_invoice_id
+      set_possible_primary_keys :repeating_invoice_id
       #list_contains_summary_only true
 
-      guid         :invoice_id
-      string       :invoice_number
+      guid         :repeating_invoice_id
       string       :reference
       guid         :branding_theme_id
-      string       :url
       string       :type
-      date         :date
-      date         :due_date
-      date         :expected_payment_date
-      date         :planned_payment_date
+      # date         :due_date
+      # date         :expected_payment_date
+      # date         :planned_payment_date
       string       :status
       string       :line_amount_types
       decimal      :sub_total, :calculated => true
       decimal      :total_tax, :calculated => true
       decimal      :total, :calculated => true
-      decimal      :amount_due
-      decimal      :amount_paid
-      decimal      :amount_credited
-      datetime_utc :updated_date_utc, :api_name => 'UpdatedDateUTC'
+      # datetime_utc :updated_date_utc, :api_name => 'UpdatedDateUTC'
       string       :currency_code
       decimal      :currency_rate, :calculated => true
-      datetime     :fully_paid_on_date
-      boolean      :sent_to_contact
+
       boolean      :has_attachments
 
       belongs_to   :contact
+      belongs_to   :schedule
       has_many     :line_items
-      has_many     :payments
-      has_many     :credit_notes
 
-      validates_presence_of :date, :due_date, :unless => :new_record?
+
+      # validates_presence_of :date, :due_date, :unless => :new_record?
       validates_inclusion_of :type, :in => INVOICE_TYPES
       validates_inclusion_of :status, :in => INVOICE_STATUSES, :unless => :new_record?
       validates_inclusion_of :line_amount_types, :in => LINE_AMOUNT_TYPES, :unless => :new_record?

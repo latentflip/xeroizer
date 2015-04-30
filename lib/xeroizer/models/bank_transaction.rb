@@ -15,6 +15,7 @@ module Xeroizer
       } unless defined?(BANK_TRANSACTION_STATUS)
       BANK_TRANSACTION_STATUSES = BANK_TRANSACTION_STATUS.keys.sort
 
+      BANK_TRANSFER_TYPES = [ 'SPEND-TRANSFER', 'RECEIVE-TRANSFER' ]
 
       def initialize(parent)
         super parent
@@ -22,17 +23,25 @@ module Xeroizer
       end
 
       set_primary_key :bank_transaction_id
-      list_contains_summary_only true
+      # list_contains_summary_only true
 
       string :type
       date :date
 
       datetime_utc  :updated_date_utc, :api_name => "UpdatedDateUTC"
       date          :fully_paid_on_date
+      string        :url
       string        :reference
       string        :bank_transaction_id, :api_name => "BankTransactionID"
       boolean       :is_reconciled
       string        :status
+
+      string        :currency_code
+      decimal       :currency_rate, :calculated => true
+
+      decimal :total, :calculated => true
+      decimal :sub_total, :calculated => true
+      decimal :total_tax, :calculated => true
 
       alias_method :reconciled?, :is_reconciled
 
@@ -45,14 +54,22 @@ module Xeroizer
         :in => Xeroizer::Record::LINE_AMOUNT_TYPES, :allow_blanks => false
 
       validates_inclusion_of :type,
-        :in => %w{SPEND RECEIVE}, :allow_blanks => false,
-        :message => "Invalid type. Expected either SPEND or RECEIVE."
+        :in => %w{SPEND RECEIVE RECEIVE-PREPAYMENT RECEIVE-OVERPAYMENT}, :allow_blanks => false,
+        :message => "Invalid type. Expected either SPEND, RECEIVE, RECEIVE-PREPAYMENT or RECEIVE-OVERPAYMENT."
       validates_inclusion_of :status, :in => BANK_TRANSACTION_STATUSES, :unless => :new_record?
 
       validates_presence_of :contact, :bank_account, :allow_blanks => false
 
       validates :line_items, :message => "Invalid line items. Must supply at least one." do
         self.line_items.size > 0
+      end
+
+      def currency_rate
+        if attributes[:currency_rate]
+          BigDecimal.new(attributes[:currency_rate])
+        else
+          BigDecimal.new('1.0')
+        end
       end
 
       def sub_total=(value); raise SettingTotalDirectlyNotSupported.new(:sub_total); end
@@ -62,6 +79,8 @@ module Xeroizer
       def total; sub_total + total_tax; end
 
       def sub_total
+        return attributes[:total] if is_transfer?
+
         if ought_to_recalculate_totals?
           result = LineItemSum.sub_total(self.line_items)
           result -= total_tax if line_amount_types == 'Inclusive'
@@ -72,9 +91,15 @@ module Xeroizer
       end
 
       def total_tax
+        return BigDecimal.new('0') if is_transfer?
+
         return ought_to_recalculate_totals? ?
           LineItemSum.total_tax(self.line_items) :
           attributes[:total_tax]
+      end
+
+      def is_transfer?
+        BANK_TRANSFER_TYPES.include? attributes[:type]
       end
 
       private

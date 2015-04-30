@@ -1,0 +1,68 @@
+<Response xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Id>8ce97e9e-31d2-457a-a75d-5e359ffac103</Id>
+  <Status>OK</Status>
+  <ProviderName>Xero API Previewer</ProviderName>
+  <DateTimeUTC>2013-05-20T11:54:50.9949578Z</DateTimeUTC>
+  <BankTransactions>
+    <BankTransaction>
+      <Contact>
+        <ContactID>a852a44c-3d8f-4c4b-a628-3a2c2121b9b1</ContactID>
+        <Name>Bank West</Name>
+      </Contact>
+      <Date>2013-05-16T00:00:00</Date>
+      <Status>AUTHORISED</Status>
+      <LineAmountTypes>Inclusive</LineAmountTypes>
+      <SubTotal>1000.00</SubTotal>
+      <TotalTax>0.00</TotalTax>
+      <Total>1000.00</Total>
+      <UpdatedDateUTC>2013-05-16T15:45:07.563</UpdatedDateUTC>
+      <CurrencyCode>GBP</CurrencyCode>
+      <BankTransactionID>ee4c4d5a-437d-4369-b152-848bd932f431</BankTransactionID>
+      <BankAccount>
+        <AccountID>bd9e85e0-0478-433d-ae9f-0b3c4f04bfe4</AccountID>
+        <Code>090</Code>
+        <Name>Business Bank Account</Name>
+      </BankAccount>
+      <Type>SPEND</Type>
+      <IsReconciled>false</IsReconciled>
+    </BankTransaction>
+    <BankTransaction>
+      <Contact>
+        <ContactID>d69ed9cd-f98a-4604-aced-54a1611554b2</ContactID>
+        <Name>Foo</Name>
+      </Contact>
+      <Date>2013-05-20T00:00:00</Date>
+      <Status>AUTHORISED</Status>
+      <LineAmountTypes>Inclusive</LineAmountTypes>
+      <SubTotal>123.00</SubTotal>
+      <TotalTax>0.00</TotalTax>
+      <Total>123.00</Total>
+      <UpdatedDateUTC>2013-05-20T11:39:41.34</UpdatedDateUTC>
+      <CurrencyCode>USD</CurrencyCode>
+      <BankTransactionID>8644472b-ea4e-4e5a-9987-f79250ece35e</BankTransactionID>
+      <BankAccount>
+        <AccountID>66c28ab3-05c2-4db7-9066-4357b8099fd8</AccountID>
+        <Name>FooBar</Name>
+      </BankAccount>
+      <Type>SPEND</Type>
+      <IsReconciled>false</IsReconciled>
+      <CurrencyRate>1.519520</CurrencyRate>
+    </BankTransaction>
+    <BankTransaction>
+      <Date>2013-09-17T00:00:00</Date>
+      <Status>AUTHORISED</Status>
+      <LineAmountTypes>NoTax</LineAmountTypes>
+      <Total>120.00</Total>
+      <UpdatedDateUTC>2013-09-17T14:47:58.95</UpdatedDateUTC>
+      <CurrencyCode>GBP</CurrencyCode>
+      <BankTransactionID>ea28d9c6-c9e8-4261-8c0f-cf04192f3726</BankTransactionID>
+      <BankAccount>
+        <AccountID>bd9e85e0-0478-433d-ae9f-0b3c4f04bfe4</AccountID>
+        <Code>090</Code>
+        <Name>Business Bank Account</Name>
+      </BankAccount>
+      <Type>SPEND-TRANSFER</Type>
+      <IsReconciled>false</IsReconciled>
+    </BankTransaction>
+  </BankTransactions>
+</Response>

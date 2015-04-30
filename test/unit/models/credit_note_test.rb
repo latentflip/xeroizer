@@ -26,9 +26,20 @@ class CreditNoteTest < Test::Unit::TestCase
     should "large-scale testing from API XML" do
       credit_notes = @client.CreditNote.all
       credit_notes.each do | credit_note |
+        assert_equal(credit_note.attributes[:currency_code], credit_note.currency_code)
+
+        if credit_note.attributes[:currency_rate]
+          assert_equal(credit_note.attributes[:currency_rate], credit_note.currency_rate)
+        else
+          assert_equal(1.0, credit_note.currency_rate)
+        end
+
+
         assert_equal(credit_note.attributes[:sub_total], credit_note.sub_total)
         assert_equal(credit_note.attributes[:total_tax], credit_note.total_tax)
         assert_equal(credit_note.attributes[:total], credit_note.total)
+
+        assert_equal(credit_note.attributes[:remaining_credit], credit_note.remaining_credit)
       end
     end
     

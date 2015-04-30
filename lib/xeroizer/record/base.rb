@@ -45,7 +45,11 @@ module Xeroizer
         end
 
         def new_model_class(model_name)
-          Xeroizer::Record.const_get("#{model_name}Model".to_sym).new(parent.application, model_name.to_s)
+          if parent
+            Xeroizer::Record.const_get("#{model_name}Model".to_sym).new(parent.application, model_name.to_s)
+          else
+            Xeroizer::Record.const_get("#{model_name}Model".to_sym).new(nil, model_name.to_s)
+          end
         end
         
         def [](attribute)
@@ -136,13 +140,13 @@ module Xeroizer
         end
                 
       protected
-      
+
         # Attempt to create a new record.
         def create
           request = to_xml
           log "[CREATE SENT] (#{__FILE__}:#{__LINE__}) #{request}"
           
-          response = parent.http_post(request)
+          response = parent.send(parent.create_method, request)
           log "[CREATE RECEIVED] (#{__FILE__}:#{__LINE__}) #{response}"
           
           parse_save_response(response)

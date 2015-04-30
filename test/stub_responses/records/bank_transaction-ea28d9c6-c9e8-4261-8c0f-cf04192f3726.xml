@@ -1,0 +1,24 @@
+<Response xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Id>4e25a58b-02c4-40f7-9e8b-ca77b2a9d61a</Id>
+  <Status>OK</Status>
+  <ProviderName>Xero API Previewer</ProviderName>
+  <DateTimeUTC>2013-09-18T14:17:01.2026157Z</DateTimeUTC>
+  <BankTransactions>
+    <BankTransaction>
+      <Date>2013-09-17T00:00:00</Date>
+      <Status>AUTHORISED</Status>
+      <LineAmountTypes>NoTax</LineAmountTypes>
+      <Total>120.00</Total>
+      <UpdatedDateUTC>2013-09-17T14:47:58.95</UpdatedDateUTC>
+      <CurrencyCode>GBP</CurrencyCode>
+      <BankTransactionID>ea28d9c6-c9e8-4261-8c0f-cf04192f3726</BankTransactionID>
+      <BankAccount>
+        <AccountID>bd9e85e0-0478-433d-ae9f-0b3c4f04bfe4</AccountID>
+        <Code>090</Code>
+        <Name>Business Bank Account</Name>
+      </BankAccount>
+      <Type>SPEND-TRANSFER</Type>
+      <IsReconciled>false</IsReconciled>
+    </BankTransaction>
+  </BankTransactions>
+</Response>

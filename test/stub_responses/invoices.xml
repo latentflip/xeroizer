@@ -17,7 +17,8 @@
       <TotalTax>13.50</TotalTax>
       <Total>148.50</Total>
       <UpdatedDateUTC>2008-09-16T10:28:51.5</UpdatedDateUTC>
-      <CurrencyCode>AUD</CurrencyCode>
+      <CurrencyCode>USD</CurrencyCode>
+      <CurrencyRate>1.516990</CurrencyRate>
       <FullyPaidOnDate>2011-02-24T00:00:00</FullyPaidOnDate>
       <Type>ACCPAY</Type>
       <InvoiceID>0032f627-3156-4d30-9b1c-4d3b994dc921</InvoiceID>

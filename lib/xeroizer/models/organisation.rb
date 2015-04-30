@@ -13,6 +13,7 @@ module Xeroizer
       string    :api_key, :api_name => 'APIKey'
       string    :name
       string    :legal_name
+      string    :short_code
       boolean   :pays_tax
       string    :version
       string    :organisation_type
@@ -26,7 +27,11 @@ module Xeroizer
       date      :end_of_year_lock_date
       string    :tax_number
       string    :registration_number
+      string    :timezone
       datetime  :created_date_utc, :api_name => 'CreatedDateUTC'
+
+      has_many :addresses
+      has_many :phones
 
     end
     

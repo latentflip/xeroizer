@@ -4,16 +4,18 @@ require 'rdoc/task'
 require 'rubygems'
 require 'yard'
 
+require 'bundler/gem_tasks'
 require 'jeweler'
+
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "xeroizer"
+  gem.name = "xeroizer-float"
   gem.homepage = "http://github.com/waynerobinson/xeroizer"
   gem.license = "MIT"
   gem.summary = %Q{Xero library}
   gem.description = %Q{Ruby library for the Xero accounting system API.}
   gem.email = "wayne.robinson@gmail.com"
-  gem.authors = ["Wayne Robinson"]
+  gem.authors = ["Wayne Robinson", "Philip Roberts"]
   gem.add_runtime_dependency 'builder', '>= 2.1.2'
   gem.add_runtime_dependency 'oauth',   '>= 0.3.6'
   gem.add_runtime_dependency 'activesupport'
@@ -33,7 +35,7 @@ Rake::TestTask.new(:test) do |t|
   t.verbose = true
 end
 
-namespace :test do 
+namespace :test do
   desc 'Run acceptance/integration tests'
   Rake::TestTask.new(:acceptance) do |t|
     t.libs << ['lib', 'test']
@@ -52,4 +54,13 @@ end
 YARD::Rake::YardocTask.new do |t|
   # t.files   = ['lib/**/*.rb', OTHER_PATHS]   # optional
   # t.options = ['--any', '--extra', '--opts'] # optional
+end
+
+namespace :gem do
+  task :publish do
+    puts `rm *.gem`
+    puts `rake gemspec`
+    puts `gem build xeroizer-float.gemspec`
+    puts `gem push *.gem`
+  end
 end
