@@ -176,7 +176,7 @@ module Xeroizer
           Response.parse(response_xml, options) do | response, elements, response_model_name |
             if model_name == response_model_name
               @response = response
-              parse_records(response, elements)
+              parse_records(response, elements, paged_records_requested?(options))
             end
           end
         end
@@ -186,9 +186,12 @@ module Xeroizer
         end
 
       protected
+        def paged_records_requested?(options)
+          options.has_key?(:page) and options[:page].to_i >= 0
+        end
 
         # Parse the records part of the XML response and builds model instances as necessary.
-        def parse_records(response, elements)
+        def parse_records(response, elements, paged_results)
           elements.each do | element |
             new_record = model_class.build_from_node(element, self)
             if element.attribute('status').try(:value) == 'ERROR'
@@ -197,6 +200,7 @@ module Xeroizer
                 new_record.errors << err.text.gsub(/^\s+/, '').gsub(/\s+$/, '')
               end
             end
+            new_record.paged_record_downloaded = paged_results
             response.response_items << new_record
           end
         end

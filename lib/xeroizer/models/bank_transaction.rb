@@ -23,7 +23,7 @@ module Xeroizer
       end
 
       set_primary_key :bank_transaction_id
-      # list_contains_summary_only true
+      list_contains_summary_only true
 
       string :type
       date :date
@@ -47,7 +47,7 @@ module Xeroizer
 
       belongs_to :contact, :model_name => 'Contact'
       string :line_amount_types
-      has_many :line_items, :model_name => 'LineItem'
+      has_many :line_items, :model_name => 'LineItem', :complete_on_page => true
       belongs_to :bank_account, :model_name => 'BankAccount'
 
       validates_inclusion_of :line_amount_types,
