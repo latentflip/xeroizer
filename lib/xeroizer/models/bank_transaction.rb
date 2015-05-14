@@ -65,7 +65,7 @@ module Xeroizer
       end
 
       def currency_rate
-        download_complete_record! if !complete_record_downloaded? || !paged_record_downloaded?
+        download_complete_record! if !paged_record_downloaded? && !complete_record_downloaded? 
         if attributes[:currency_rate]
           BigDecimal.new(attributes[:currency_rate])
         else
