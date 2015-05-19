@@ -65,6 +65,8 @@ module Xeroizer
       end
 
       def currency_rate
+        #temp hack to always get rates for bank transafers
+        download_complete_record! if is_transfer?
         if attributes[:currency_rate]
           BigDecimal.new(attributes[:currency_rate])
         else
