@@ -52,7 +52,7 @@ module Xeroizer
         :in => Xeroizer::Record::LINE_AMOUNT_TYPES, :allow_blanks => false
 
       validates_inclusion_of :type,
-        :in => %w{SPEND RECEIVE RECEIVE-PREPAYMENT RECEIVE-OVERPAYMENT}, :allow_blanks => false,
+        :in => %w{SPEND RECEIVE RECEIVE-PREPAYMENT RECEIVE-OVERPAYMENT SPEND-TRANSFER RECEIVE-TRANSFER }, :allow_blanks => false,
         :message => "Invalid type. Expected either SPEND, RECEIVE, RECEIVE-PREPAYMENT or RECEIVE-OVERPAYMENT."
       validates_inclusion_of :status, :in => BANK_TRANSACTION_STATUSES, :allow_blanks => true
 
