@@ -18,6 +18,8 @@ module Xeroizer
       } unless defined?(BANK_TRANSACTION_STATUS)
       BANK_TRANSACTION_STATUSES = BANK_TRANSACTION_STATUS.keys.sort
 
+      BANK_TRANSFER_TYPES = [ 'SPEND-TRANSFER', 'RECEIVE-TRANSFER' ]
+
       include Attachment::Extensions
 
       def initialize(parent)
@@ -55,7 +57,7 @@ module Xeroizer
         :in => Xeroizer::Record::LINE_AMOUNT_TYPES, :allow_blanks => false
 
       validates_inclusion_of :type,
-        :in => %w{SPEND RECEIVE RECEIVE-PREPAYMENT RECEIVE-OVERPAYMENT SPEND-TRANSFER RECEIVE-TRANSFER }, :allow_blanks => false,
+        :in => %w{SPEND RECEIVE RECEIVE-PREPAYMENT RECEIVE-OVERPAYMENT}, :allow_blanks => false,
         :message => "Invalid type. Expected either SPEND, RECEIVE, RECEIVE-PREPAYMENT or RECEIVE-OVERPAYMENT."
       validates_inclusion_of :status, :in => BANK_TRANSACTION_STATUSES, :allow_blanks => true
 
@@ -72,6 +74,8 @@ module Xeroizer
       def total; sub_total + total_tax; end
 
       def sub_total
+        return attributes[:total] if is_transfer?
+
         if ought_to_recalculate_totals?
           result = LineItemSum.sub_total(self.line_items)
           result -= total_tax if line_amount_types == 'Inclusive'
@@ -82,9 +86,15 @@ module Xeroizer
       end
 
       def total_tax
+        return BigDecimal.new('0') if is_transfer?
+
         return ought_to_recalculate_totals? ?
           LineItemSum.total_tax(self.line_items) :
           attributes[:total_tax]
+      end
+
+      def is_transfer?
+        BANK_TRANSFER_TYPES.include? attributes[:type]
       end
 
       private
