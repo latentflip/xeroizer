@@ -40,6 +40,9 @@ module Xeroizer
       string        :status
       string        :currency_code
       decimal       :currency_rate
+      decimal       :total, :calculated => true
+      decimal       :sub_total, :calculated => true
+      decimal       :total_tax, :calculated => true
 
       alias_method :reconciled?, :is_reconciled
 
