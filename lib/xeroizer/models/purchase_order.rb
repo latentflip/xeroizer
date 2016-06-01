@@ -38,7 +38,7 @@ module Xeroizer
       string  :sub_total
       string  :total_tax
       string  :total 
-      date    :updated_date_UTC
+      date    :updated_date_utc
       boolean :has_attachments
 
       has_many     :line_items
