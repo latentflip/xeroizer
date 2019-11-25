@@ -47,7 +47,7 @@ module Xeroizer
 
           def parse_value(value)
             case value
-              when /\A[-]?\d+(\.\d+)?\z/                      then BigDecimal.new(value)
+              when /\A[-]?\d+(\.\d+)?\z/                      then BigDecimal(value)
               when /\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\z/  then Time.xmlschema(value)
               else                                            value
             end
