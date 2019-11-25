@@ -86,7 +86,7 @@ module Xeroizer
       end
 
       def total_tax
-        return BigDecimal.new('0') if is_transfer?
+        return BigDecimal('0') if is_transfer?
 
         return ought_to_recalculate_totals? ?
           LineItemSum.total_tax(self.line_items) :
