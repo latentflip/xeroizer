@@ -57,8 +57,8 @@ module Xeroizer
         :in => Xeroizer::Record::LINE_AMOUNT_TYPES, :allow_blanks => false
 
       validates_inclusion_of :type,
-        :in => %w{SPEND RECEIVE RECEIVE-PREPAYMENT RECEIVE-OVERPAYMENT}, :allow_blanks => false,
-        :message => "Invalid type. Expected either SPEND, RECEIVE, RECEIVE-PREPAYMENT or RECEIVE-OVERPAYMENT."
+        :in => %w{RECEIVE RECEIVE-OVERPAYMENT RECEIVE-PREPAYMENT SPEND SPEND-OVERPAYMENT SPEND-PREPAYMENT}, :allow_blanks => false,
+        :message => "Invalid type. Expected one of https://developer.xero.com/documentation/api/types#BankTransactionTypes"
       validates_inclusion_of :status, :in => BANK_TRANSACTION_STATUSES, :allow_blanks => true
 
       validates_presence_of :contact, :bank_account, :allow_blanks => false
@@ -86,7 +86,7 @@ module Xeroizer
       end
 
       def total_tax
-        return BigDecimal.new('0') if is_transfer?
+        return BigDecimal('0') if is_transfer?
 
         return ought_to_recalculate_totals? ?
           LineItemSum.total_tax(self.line_items) :
