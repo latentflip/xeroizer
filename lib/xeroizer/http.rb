@@ -172,7 +172,9 @@ module Xeroizer
         case problem
           when "token_expired"                then raise OAuth::TokenExpired.new(description)
           when "token_rejected"               then raise OAuth::TokenInvalid.new(description)
-          when "rate limit exceeded"          then raise OAuth::RateLimitExceeded.new(description)
+          when "rate limit exceeded"
+            error_type = response["x-rate-limit-problem"]
+            raise OAuth::RateLimitExceeded.new("#{description}, #{error_type}")
           when "consumer_key_unknown"         then raise OAuth::ConsumerKeyUnknown.new(description)
           when "nonce_used"                   then raise OAuth::NonceUsed.new(description)
           when "organisation offline"         then raise OAuth::OrganisationOffline.new(description)
