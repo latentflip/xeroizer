@@ -44,6 +44,7 @@ module Xeroizer
       decimal       :total, :calculated => true
       decimal       :sub_total, :calculated => true
       decimal       :total_tax, :calculated => true
+      boolean       :has_attachments
 
       alias_method :reconciled?, :is_reconciled
 
