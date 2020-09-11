@@ -60,7 +60,6 @@ module Xeroizer
       decimal       :sub_total, :calculated => true
       decimal       :total_tax, :calculated => true
       decimal       :total, :calculated => true
-      decimal       :remaining_credit
       datetime_utc  :updated_date_utc, :api_name => 'UpdatedDateUTC'
       string        :currency_code
       decimal       :currency_rate
